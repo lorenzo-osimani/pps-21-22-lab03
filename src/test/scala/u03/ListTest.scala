@@ -5,6 +5,8 @@ import org.junit.Assert.*
 import Lists.*
 import u02.Optionals.*
 
+import u02.Modules.*
+
 class ListTest:
   import List.*
   import Option.*
@@ -41,3 +43,18 @@ class ListTest:
   @Test def testMax() =
     assertEquals(Some(25), max(Cons(10, Cons(25, Cons(20, Nil())))))
     assertEquals(None(), max(Nil()))
+
+  import Person.*
+  import lab.Ex3.*
+
+  @Test def testFromPeopleToCourses() =
+    val people = Cons(Person.Teacher("Pippo", "Matematica"),
+      Cons(Person.Student("Lorenzo", 2022), Cons(Person.Teacher("Topolino", "Fisica"), Nil())))
+    assertEquals(Cons("Matematica", Cons("Fisica", Nil())), fromPeopleToCourses(people))
+    assertEquals(Cons("Matematica", Cons("Fisica", Nil())), fromPeopleToCourses2(people))
+
+  @Test def testFold() =
+    val lst = Cons(3, Cons(7, Cons(1, Cons(5, Nil()))))
+    assertEquals(-16, foldLeft(lst)(0)(_ - _))
+    assertEquals(-8, foldRight(lst)(0)(_ - _))
+    assertEquals(0, foldLeft(Nil())(0)(_ - _))

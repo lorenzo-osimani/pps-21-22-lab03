@@ -51,6 +51,13 @@ object Lists extends App:
 
       maxIteration(l, None())
 
+    def foldLeft[A](l: List[A])(value: A)(operator: (A, A) => A): A = l match
+      case Cons(h, t) => foldLeft(t)(operator(value, h))(operator)
+      case Nil() => value
+
+    def foldRight[A](l: List[A])(value: A)(operator: (A, A) => A): A = l match
+      case Cons(h, t) => operator(h, foldRight(t)(value)(operator))
+      case Nil() => value
 
 
   val l = List.Cons(10, List.Cons(20, List.Cons(30, List.Nil())))
