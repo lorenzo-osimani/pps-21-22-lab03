@@ -1,5 +1,6 @@
 package u03
 
+import u02.Modules.*
 import u02.Optionals.Option
 
 object Lists extends App:
@@ -11,6 +12,7 @@ object Lists extends App:
   // a companion object (i.e., module) for List
   object List:
     import Option.*
+    import Person.*
 
     def sum(l: List[Int]): Int = l match
       case Cons(h, t) => h + sum(t)
@@ -58,5 +60,16 @@ object Lists extends App:
       case Cons(h, t) => operator(h, foldRight(t)(value)(operator))
       case Nil() => value
 
+    def fromPeopleToCourses(l: List[Person]): List[String] =
+      val teachers = filter[Person](l)(!isStudent(_))
+      map(teachers)(p => p match
+        case Teacher(_, course) => course
+      )
+
+    def fromPeopleToCourses2(l: List[Person]): List[String] =
+      flatMap(l)(p => p match
+        case Teacher(_, course) => Cons(course, Nil())
+        case _ => Nil()
+      )
+
   end List
-  
