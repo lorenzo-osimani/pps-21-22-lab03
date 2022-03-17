@@ -1,5 +1,7 @@
 package u03
 
+import u03.Streams.Stream
+
 object Streams extends App:
 
   import Lists.*
@@ -37,15 +39,17 @@ object Streams extends App:
     def iterate[A](init: => A)(next: A => A): Stream[A] =
       cons(init, iterate(next(init))(next))
 
-  // TODO: def drop(....)
+    def drop[A](stream: Stream[A])(n: Int): Stream[A] = stream match
+      case Cons(head, tail) if n > 1 => drop(tail())(n - 1)
+      case Cons(head, tail) => tail()
+      case _ => Empty()
+
+    def constant[A](k: A): Stream[A] =
+      iterate(k)(_ => k)
+
+    def fibonacci(): Stream[Int] =
+      def nextFibonacciElement(current: Int)(next: Int): Stream[Int] =
+        cons(current, nextFibonacciElement(next)(current + next))
+      nextFibonacciElement(0)(1)
+
   end Stream
-
-  // var simplifies chaining of functions a bit..
-  var str = Stream.iterate(0)(_ + 1) // {0,1,2,3,..}
-  str = Stream.map(str)(_ + 1) // {1,2,3,4,..}
-  str = Stream.filter(str)(x => (x < 3 || x > 20)) // {1,2,21,22,..}
-  str = Stream.take(str)(10) // {1,2,21,22,..,28}
-  println(Stream.toList(str)) // [1,2,21,22,..,28]
-
-  val corec: Stream[Int] = Stream.cons(1, corec) // {1,1,1,..}
-  println(Stream.toList(Stream.take(corec)(10))) // [1,1,..,1]

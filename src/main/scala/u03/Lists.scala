@@ -48,7 +48,6 @@ object Lists extends App:
         case (Cons(h, t), Some(x)) if (h <= x) => maxIteration(t, Some(x))
         case (Cons(h, t), _) => maxIteration(t, Some(h))
         case (Nil(), current) => current
-
       maxIteration(l, None())
 
     def foldLeft[A](l: List[A])(value: A)(operator: (A, A) => A): A = l match
@@ -59,10 +58,5 @@ object Lists extends App:
       case Cons(h, t) => operator(h, foldRight(t)(value)(operator))
       case Nil() => value
 
-
-  val l = List.Cons(10, List.Cons(20, List.Cons(30, List.Nil())))
-  println(List.sum(l)) // 60
-
-  import List.*
-
-  println(sum(map(filter(l)(_ >= 20))(_ + 1))) // 21+31 = 52
+  end List
+  
